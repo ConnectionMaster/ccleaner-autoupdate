@@ -12,6 +12,9 @@ for %%f in ("%~dp0ccsetup*.exe") do (
 ::if there are no ccsetup files, then assume that this script has never installed ccleaner
 if not exist "%~dp0%cver%.exe" ( set cver=none )
 
+REM [DEBUG]
+echo current install is %cver%
+
 ::download the "slim" installer, which comes with no special promos or anything
 ::using the --no-clober switch, we ensure that we dont redownload the current version
 echo Checking server for updates . . .
@@ -49,4 +52,4 @@ for %%f in ("%~dp0ccsetup*.exe") do (
 	)
 )
 REM echo.
-REM pause
+pause

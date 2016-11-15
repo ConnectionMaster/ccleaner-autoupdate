@@ -12,3 +12,9 @@ maybe make the task so that it depends on the network connection?
 maybe i could make a version of this updater that notifies the user that there is a ccleaner update
 
 maybe at the end of the update I should have it autoclean the system?
+
+
+
+BETAstandard downloader
+maybe check the portable versions file name?
+http://download.piriform.com/ccsetup524.exe

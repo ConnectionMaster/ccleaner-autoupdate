@@ -1,4 +1,4 @@
-set installdir=P:\PortableApps\ccleaner
+set installdir=ccsetup
 @echo off
 ::if you run this as administrator or with UAC disabled, you will not be prompted to run the installer, it will be automatic
 
@@ -21,7 +21,14 @@ echo.
 
 ::if we get a 404 not found or unable to resolve host error, then either ccleaner slim is temporarily unavailable, or there is no network connection.
 ::we stop the script and exit with code 0x1 so that windows task scheduler can attempt to try again later
-if %errorlevel%==1 exit 1
+REM if %errorlevel%==1 exit 1
+REM this is used for windows task scheduler, and since this is the portable version, this script would be run on demand and so we tell the user what happend instead.
+if %errorlevel%==1 (
+	echo.
+	echo ccleaner could not update
+	pause
+	exit
+)
 
 ::if we download a new setup file, delete all but the latest ccsetup file
 ::http://stackoverflow.com/questions/13367746/batch-file-that-keeps-the-7-latest-files-in-a-folder
@@ -40,4 +47,4 @@ for %%f in ("%~dp0ccsetup*.zip") do (
 	)
 )
 REM echo.
-REM pause
+pause
