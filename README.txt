@@ -9,6 +9,10 @@ the only issue is that once the script starts the install, the user needs to con
 --------------------------------------------------------------------------------
 CHANGELOG
 --------------------------------------------------------------------------------
+3/12/19 - 0.25
+-updated wget to 1.20 from eternallybored.org
+-updated BETAstandarddownloader.bat
+
 3/29/16 - 0.22
 -added a case that checks for "downloadfile" which is downloaded in place of the slim installer when the Piriform website has not yet updated its slim installer. The script now returns an error, deletes the "downloadfile" (to prevent a detection of a wrong version) and then exits and returns 0x1.
 
