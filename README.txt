@@ -35,3 +35,6 @@ http://stackoverflow.com/questions/39615/how-to-loop-through-files-matching-wild
 
 this is piriforms site on the command line parameters of the installer
 http://www.piriform.com/docs/ccleaner/advanced-usage/command-line-parameters
+
+wget is from eternally bored
+https://eternallybored.org/misc/wget/
