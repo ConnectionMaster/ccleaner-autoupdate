@@ -1,3 +1,13 @@
+# vendored items
+bin/* linguist-vendored
+portable/* linguist-vendored
+
+# un-vendor some of my items
+bin/addtask.bat linguist-vendored=false
+bin/removetask.bat linguist-vendored=false
+portable/ccleaner.bat linguist-vendored=false
+portable/update.bat linguist-vendored=false
+
 # Auto detect text files and perform LF normalization
 * text=auto
 
