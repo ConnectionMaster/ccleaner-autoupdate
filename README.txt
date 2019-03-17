@@ -11,6 +11,7 @@ CHANGELOG
 --------------------------------------------------------------------------------
 3/12/19 - 0.25
 -updated wget to 1.20 from eternallybored.org
+-updated 7-zip to 19.00
 -updated BETAstandarddownloader.bat
 
 3/29/16 - 0.22
@@ -34,11 +35,11 @@ CHANGELOG
 --------------------------------------------------------------------------------
 RESOURCES
 --------------------------------------------------------------------------------
+wget 1.20 from https://eternallybored.org/misc/wget/
+7-Zip 19.00 (2019-02-21) from https://www.7-zip.org/download.html
+
 i used this to finger out how to match the setup file
 http://stackoverflow.com/questions/39615/how-to-loop-through-files-matching-wildcard-in-batch-file
 
 this is piriforms site on the command line parameters of the installer
 http://www.piriform.com/docs/ccleaner/advanced-usage/command-line-parameters
-
-wget is from eternally bored
-https://eternallybored.org/misc/wget/
