@@ -1,6 +1,12 @@
 #ccleaner installers
 ccsetup*.exe
 ccsetup*.zip
+portable
+standard
+ccleanerportable.txt
+ccleanerstandard.txt
+defragglerportable.txt
+defragglerstandard.txt
 
 # Windows image file caches
 Thumbs.db

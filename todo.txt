@@ -1,4 +1,4 @@
-maybe make it so that the main task pings a website and if it succeeds, then it runs the update
+
 at the end of the secondary update script, have it delete the hourly task that is created in the event the ping fails
 
 if the ping fails, it uses command line to create a new task that will run itself (the same batch) again the next day (schedule it to be daily? maybe hourly) and then quits without running anything else
@@ -6,13 +6,9 @@ if the ping fails, it uses command line to create a new task that will run itsel
 
 or more easily, I can use the ping method again, but if it fails, throw "exit 1" so that it returns 0x1 and task scheduler can attempt to rerun it
 
-maybe make the task so that it depends on the network connection?
-
-
 maybe i could make a version of this updater that notifies the user that there is a ccleaner update
 
 maybe at the end of the update I should have it autoclean the system?
-
 
 
 BETAstandard downloader
