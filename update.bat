@@ -1,55 +1,102 @@
 @echo off
-::if you run this as administrator or with UAC disabled, you will not be prompted to run the installer, it will be automatic
-
-::change working directory to the script location so that wget downloads to the script location (easier for cleanup)
 cd /d "%~dp0"
+:: ==================================================
+:: Check Arguments
+:: ==================================================
+:: usage: update.bat [ccleaner | defraggler] [portable | standard]
+:: you can choose to download either ccleaner or defraggler 
+:: selecting portable or standard will determine the type of setup
+if %1==ccleaner goto type
+if %1==defraggler goto type
+exit /b 1
+:type
+if %2==portable goto main
+if %2==standard goto main
+exit /b 1
+:: if the arguments were wrong, exit the batch script with errorcode 1
+:: /b is needed otherwise it will exit cmd
 
-:: first we search for existing ccsetup files to determine the last version this script installed
-for %%f in ("%~dp0ccsetup*.exe") do (
-	:: assume that this is the current version
-	set cver=%%~nf
+:main
+:: ==================================================
+:: Check Network Connection
+:: ==================================================
+set NETWORK_AVAILABLE=yes
+ipconfig /all | find /i "Subnet Mask" >NUL 2>&1
+if /i not %ERRORLEVEL%==0 (
+    echo No network connection found. Skipping update . . .
+    exit /b 1
 )
-::if there are no ccsetup files, then assume that this script has never installed ccleaner
-if not exist "%~dp0%cver%.exe" ( set cver=none )
 
-REM [DEBUG]
-echo current install is %cver%
-
-::download the "slim" installer, which comes with no special promos or anything
-::using the --no-clober switch, we ensure that we dont redownload the current version
-echo Checking server for updates . . .
-echo.
-"%~dp0bin\wget" -nc --content-disposition http://www.piriform.com/ccleaner/download/slim/downloadfile
-
-::if we get a 404 not found or unable to resolve host error, then either ccleaner slim is temporarily unavailable, or there is no network connection.
-::we stop the script and exit with code 0x1 so that windows task scheduler can attempt to try again later
-if %errorlevel%==1 exit 1
-::if Piriform's website doesnt have a slim installer up for the latest version, then wget will download a 0KB file titled "downloadfile"
-::so then delete this junk file then exit with 0x1 to try again later
-if exist "%~dp0downloadfile" (
-	echo CCleaner slim installer has not updated on the Piriform website yet.
-	del "%~dp0downloadfile"
-	REM [DEBUG] this is a debug pause
-	REM pause
-	exit 1
-	)
-
-::if we download a new setup file, delete all but the latest ccsetup file
-::http://stackoverflow.com/questions/13367746/batch-file-that-keeps-the-7-latest-files-in-a-folder
-for /f "skip=1 eol=: delims=" %%F in ('dir /b /o-d "%~dp0ccsetup*.exe"') do @del "%%F"
-
-for %%f in ("%~dp0ccsetup*.exe") do (
-	:: if the ccsetup file that we find is the same version as the previous one, then we skip the install
-	if %%~nf==%cver% (
-		echo CCleaner is already up to date [%%~nf]
-	) else (
-		echo A newer version of CCleaner was found [%cver% --^> %%~nf]
-		echo Installing . . .
-		:: execute the setup in silent mode
-		REM [DEBUG] comment this for debugging
-		%%~ff /S
-		echo Finished
-	)
+:: ==================================================
+:: Download Link From Server
+:: ==================================================
+:: links you could use for the download
+:: http://www.piriform.com/ccleaner/download/slim/downloadfile which also redirects to https://www.ccleaner.com/go/get_ccslim (replace slim with standard, portable, etc...)
+:: https://www.ccleaner.com/ccleaner/download/portable
+::first we download the header from the standard download site which has the redirect url
+REM bin\wget --content-disposition -N -S https://www.ccleaner.com/go/get_ccportable
+if %1==defraggler (
+    bin\wget --content-disposition --server-response -O %2 https://www.ccleaner.com/%1/download/%2/downloadfile
 )
-REM echo.
-pause
+bin\wget --content-disposition --server-response -O %2 https://www.ccleaner.com/%1/download/%2
+
+:: ==================================================
+:: Link Extraction
+:: ==================================================
+::now we look for the redirect url in the header file we downloaded
+::http://stackoverflow.com/questions/22198458/find-text-in-file-and-set-it-as-a-variable-batch-file
+for /F "delims=" %%a in ('findstr /I "data-download-url" %2') do set "new_link=%%a"
+:: cleanup
+del %2
+
+:: Split String https://www.dostips.com/DtTipsStringManipulation.php#Snippets.SplitString
+for /f "tokens=1,2,3,4 delims==" %%a in ("%new_link%") do set new_link=%%d
+
+:: Remove "data-timeout" from the string https://www.dostips.com/DtTipsStringManipulation.php#Snippets.Remove
+set "new_link=%new_link:data-timeout=%"
+
+:: Remove spaces https://www.dostips.com/DtTipsStringManipulation.php#Snippets.RemoveSpaces
+set new_link=%new_link: =%
+
+:: Trim quotes https://www.dostips.com/DtTipsStringManipulation.php#Snippets.TrimQuotes
+for /f "useback tokens=*" %%a in ('%new_link%') do set new_link=%%~a
+
+set old_link=none
+set /p old_link=<%1%2.txt
+
+:: compare
+if %old_link%==%new_link% (
+    echo No update found.
+    REM CLEANUP HERE
+    exit /b 1
+) else if NOT %old_link%==%new_link% (
+    echo update found.
+    echo downloading update . . .
+    echo %new_link%>%1%2.txt
+    bin\wget %new_link%
+)
+
+:: ==================================================
+:: Install
+:: ==================================================
+:: PORTABLE
+for %%f in ("%~dp0ccsetup*.zip") do (
+    echo Installing . . .
+    ::  start extracting using 7zip overwriting all files
+    REM bin\7z x -o"%installdir%" -aoa "%%~ff"
+    bin\7za x -o"%1" -y "%%~ff"
+    echo Finished
+    del %%~ff
+    exit /b 1
+)
+
+:: STANDARD INSTALLATION
+for %%f in ("%~dp0ccsetup*.exe") do (
+	echo Installing . . .
+	:: execute the setup in silent mode
+	REM [DEBUG] comment this for debugging
+	%%~ff /S
+	echo Finished
+    del %%~ff
+    exit /b 1
+)
