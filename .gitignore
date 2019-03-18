@@ -8,6 +8,10 @@ ccleanerstandard.txt
 defragglerportable.txt
 defragglerstandard.txt
 
+ccleaner/*
+# ignore ccleaner main files but keep the settings tracked
+!ccleaner/ccleaner.ini
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

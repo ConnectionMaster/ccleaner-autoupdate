@@ -1,12 +1,11 @@
-
-notes  
-this uses wget
-
+# CCleaner AutoUpdate
 for full automation, use windows task scheduler to run this like once a month or something
 the only issue is that once the script starts the install, the user needs to confirm to allow the installation to proceed.
 
 ## Usage
 Use this script to run ccleaner or defraggler portable or use it to install the standard edition of either
+
+Defraggler downloading is not fully implemented yet.
 
 ```
 run.bat [ccleaner | defraggler] [portable | standard]
