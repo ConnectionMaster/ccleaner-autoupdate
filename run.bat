@@ -15,7 +15,8 @@ call update.bat %1 %2
 
 :: RUN
 if %2==portable (
-    %1\%1.exe /auto
+    if %PROCESSOR_ARCHITECTURE%==x86 start %1\%1.exe /auto
+	if %PROCESSOR_ARCHITECTURE%==AMD64 start %1\%164.exe /auto
 )
 if %2==standard (
     if %PROCESSOR_ARCHITECTURE%==x86 start %programfiles%\%1\%1.exe /auto
