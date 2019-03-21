@@ -14,11 +14,12 @@ exit /b 1
 call update.bat %1 %2
 
 :: RUN
+:: need these double quotes in here for some reason. otherwise it doesnt run properly...
 if %2==portable (
-    if %PROCESSOR_ARCHITECTURE%==x86 start %1\%1.exe /auto
-	if %PROCESSOR_ARCHITECTURE%==AMD64 start %1\%164.exe /auto
+    if %PROCESSOR_ARCHITECTURE%==x86 start "" %1\%1.exe /auto
+	if %PROCESSOR_ARCHITECTURE%==AMD64 start "" %1\%164.exe /auto
 )
 if %2==standard (
-    if %PROCESSOR_ARCHITECTURE%==x86 start %programfiles%\%1\%1.exe /auto
-	if %PROCESSOR_ARCHITECTURE%==AMD64 start %programfiles%\%1\%164.exe /auto
+    if %PROCESSOR_ARCHITECTURE%==x86 start "" "%programfiles%"\%1\%1.exe /auto
+	if %PROCESSOR_ARCHITECTURE%==AMD64 start "" "%programfiles%"\%1\%164.exe /auto
 )
