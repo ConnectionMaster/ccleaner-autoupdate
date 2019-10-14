@@ -1,6 +1,8 @@
 #ccleaner installers
 ccsetup*.exe
 ccsetup*.zip
+dfsetup*.exe
+dfsetup*.zip
 portable
 standard
 ccleanerportable.txt
@@ -8,6 +10,7 @@ ccleanerstandard.txt
 defragglerportable.txt
 defragglerstandard.txt
 
+defraggler
 ccleaner/*
 # ignore ccleaner main files but keep the settings tracked
 !ccleaner/ccleaner.ini
