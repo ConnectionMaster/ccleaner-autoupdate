@@ -37,8 +37,9 @@ if /i not %ERRORLEVEL%==0 (
 REM bin\wget --content-disposition -N -S https://www.ccleaner.com/go/get_ccportable
 if %1==defraggler (
     bin\wget --content-disposition --server-response -O %2 https://www.ccleaner.com/%1/download/%2/downloadfile
+) else if %1==ccleaner (
+    bin\wget --content-disposition --server-response -O %2 https://www.ccleaner.com/%1/download/%2
 )
-bin\wget --content-disposition --server-response -O %2 https://www.ccleaner.com/%1/download/%2
 
 :: ==================================================
 :: Link Extraction
@@ -79,6 +80,14 @@ if %old_link%==%new_link% (
 :: ==================================================
 :: Install
 :: ==================================================
+if %1=="defraggler" (
+    if %2=="portable" (
+        goto df_portable_inst
+    ) else if %2=="standard" (
+        goto df_std_inst
+    )
+)
+
 :: PORTABLE
 for %%f in ("%~dp0ccsetup*.zip") do (
     echo Installing . . .
@@ -90,8 +99,42 @@ for %%f in ("%~dp0ccsetup*.zip") do (
     exit /b 1
 )
 
+:df_portable_inst
+:: PORTABLE DEFRAGGLER
+for %%f in ("%~dp0dfsetup*.exe") do (
+    echo Installing . . .
+    ::  start extracting using 7zip overwriting all files
+    REM bin\7z x -o"%installdir%" -aoa "%%~ff"
+    bin\7z x -o"%1" -y "%%~ff"
+    del "%1\uninst.exe"
+    rd /s /q "%1\$_117_"
+    rd /s /q "%1\$_118_"
+    rd /s /q "%1\$PLUGINSDIR"
+    :: remove the old .dll files just in case they've been updated
+    del "%1\DefragglerShell.dll"
+    del "%1\DefragglerShell64.dll"  
+    ren "%1\DefragglerShell.dll.new" "DefragglerShell.dll"
+    ren "%1\DefragglerShell64.dll.new" "DefragglerShell64.dll"
+    echo #PORTABLE# >./defraggler/portable.dat
+    echo Finished
+    del %%~ff
+    exit /b 1
+)
+
 :: STANDARD INSTALLATION
 for %%f in ("%~dp0ccsetup*.exe") do (
+	echo Installing . . .
+	:: execute the setup in silent mode
+	REM [DEBUG] comment this for debugging
+	%%~ff /S
+	echo Finished
+    del %%~ff
+    exit /b 1
+)
+
+:df_std_inst
+::defraggler standard WIP
+for %%f in ("%~dp0dfsetup*.exe") do (
 	echo Installing . . .
 	:: execute the setup in silent mode
 	REM [DEBUG] comment this for debugging
