@@ -111,8 +111,8 @@ for %%f in ("%~dp0dfsetup*.exe") do (
     rd /s /q "%1\$_118_"
     rd /s /q "%1\$PLUGINSDIR"
     :: remove the old .dll files just in case they've been updated
-    del "%1\DefragglerShell.dll"
-    del "%1\DefragglerShell64.dll"  
+    del "%1\DefragglerShell.dll">NUL 2>&1
+    del "%1\DefragglerShell64.dll">NUL 2>&1
     ren "%1\DefragglerShell.dll.new" "DefragglerShell.dll"
     ren "%1\DefragglerShell64.dll.new" "DefragglerShell64.dll"
     echo #PORTABLE# >./defraggler/portable.dat
